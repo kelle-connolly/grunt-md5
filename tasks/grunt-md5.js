@@ -15,6 +15,7 @@ module.exports = function(grunt) {
   grunt.util = grunt.util || grunt.utils;
 
   var _ = grunt.util._;
+  var fs = require( 'fs' );
   var path = require( 'path' );
 
   grunt.registerMultiTask('md5', 'Generate a md5 filename', function() {
@@ -83,6 +84,12 @@ module.exports = function(grunt) {
       }
 
       callback(destFile, srcFile, srcCode);
+
+      // Delete original files only if explicitly set
+      if ( opts.deleteOriginals === true ) {
+        fs.unlinkSync( srcFile );
+        grunt.log.writeln( 'File \'' + srcFile + '\' removed (original).' );
+      }
 
     } catch(err) {
       grunt.log.error(err);
